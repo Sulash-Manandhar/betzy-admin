@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@/context/ClerkProvider";
 import { QueryProvider } from "@/context/QueryProvider";
-import "./globals.css";
 import { SyncActiveOrganization } from "@/context/SyncActiveOrganizationProvider";
 import { auth } from "@clerk/nextjs/server";
+import "./globals.css";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Betzy admin panel",
+  title: "Betzy Admin Panel",
   description: "Handle and manage betzy's data",
 };
 

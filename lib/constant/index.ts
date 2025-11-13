@@ -8,38 +8,39 @@ import {
   Users,
   Wallet,
 } from "lucide-react";
+import { AdminUrl } from "../types";
 
 export const PRODUCTION = "production";
 export const DEVELOPMENT = "development";
 
-export const ADMIN_URL_LIST = [
+export const ADMIN_URL_LIST: Array<AdminUrl> = [
   {
     title: "User",
-    url: "/admin/user",
+    url: "/admin/users",
     icon: User,
   },
   {
     title: "Game",
-    url: "/admin/game",
+    url: "/admin/games",
     icon: Dices,
   },
   {
-    title: "Images",
-    url: "/admin/image",
+    title: "Gallery",
+    url: "/admin/gallery",
     icon: Image,
   },
   {
     title: "Request Game Tag",
-    url: "/admin/request-game-tag",
+    url: "/admin",
     icon: MailWarning,
   },
   {
-    title: "Task",
-    url: "/admin/task",
+    title: "Tasks",
+    url: "/admin/tasks",
     icon: ClipboardList,
   },
   {
-    title: "Membership",
+    title: "Memberships",
     url: "/admin/membership",
     icon: Users,
   },
@@ -68,3 +69,7 @@ export const COLORFUL_GRID = [
 ];
 
 export const BRAND_NAME = "BETZY.FUN";
+
+export const PAGE_SIZES = [10, 20, 30, 40, 50];
+
+export const DEFAULT_PAGE_SIZE = 30;

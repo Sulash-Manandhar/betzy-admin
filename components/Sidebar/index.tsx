@@ -1,3 +1,4 @@
+import { SignedIn, UserButton } from "@clerk/nextjs";
 import {
   Sidebar as ShadcnSidebar,
   SidebarContent,
@@ -8,9 +9,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@components/ui/sidebar";
-import Link from "next/link";
-import { SignedIn, UserButton } from "@clerk/nextjs";
 import { ADMIN_URL_LIST } from "@lib/constant/index";
+import Link from "next/link";
 import SidebarHeader from "./SidebarHeader";
 
 export default function Sidebar() {
@@ -45,9 +45,7 @@ export default function Sidebar() {
                 language: "en-US",
               },
             }}
-          >
-            <div>Hello</div>
-          </UserButton>
+          />
         </SignedIn>
       </SidebarFooter>
     </ShadcnSidebar>
