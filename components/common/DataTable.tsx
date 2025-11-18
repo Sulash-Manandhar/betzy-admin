@@ -1,13 +1,4 @@
 "use client";
-import { ReactElement, useState } from "react";
-import {
-  type ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-  type PaginationState,
-} from "@tanstack/react-table";
-import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -17,158 +8,100 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from "@/lib/constant";
+import { PaginatedResponse } from "@/lib/types";
 import {
+  type ColumnDef,
+  type PaginationState,
+  VisibilityState,
+  flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import {
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
-import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from "@/lib/constant";
+import { ReactElement, useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 interface DataTableProps<TData> {
-  columns: ColumnDef<TData>[];
-  url: string;
-  pageSize?: number;
-  onFilter?: (filters: Record<string, string>) => void;
-}
-
-interface ApiResponse<TData> {
-  data: TData[];
-  total: number;
-  pageCount: number;
-}
-
-type RenderTableBodyProps = {
   isLoading: boolean;
   error: Error | null;
-  columnLength: number;
-  hasNoResult: boolean;
-  children: ReactElement[];
-};
-export function RenderTableBody({
-  isLoading,
-  columnLength,
-  error,
-  hasNoResult,
-  children,
-}: RenderTableBodyProps) {
-  if (isLoading) {
-    return (
-      <TableRow>
-        <TableCell colSpan={columnLength} className="h-24 text-center">
-          Loading...
-        </TableCell>
-      </TableRow>
-    );
-  }
-
-  if (error) {
-    return (
-      <TableRow>
-        <TableCell
-          colSpan={columnLength}
-          className="h-24 text-center text-destructive"
-        >
-          Failed to load data
-        </TableCell>
-      </TableRow>
-    );
-  }
-
-  if (hasNoResult) {
-    return (
-      <TableRow>
-        <TableCell
-          colSpan={columnLength}
-          className="h-24 text-center text-muted-foreground"
-        >
-          No results found
-        </TableCell>
-      </TableRow>
-    );
-  }
-
-  return children;
+  data: PaginatedResponse<TData> | undefined;
+  columns: ColumnDef<TData>[];
 }
 
 export function DataTable<TData extends Record<string, unknown>>({
   columns,
-  url,
-  pageSize = DEFAULT_PAGE_SIZE,
+  data,
+  isLoading,
+  error,
 }: DataTableProps<TData>) {
   const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize,
+    pageIndex: data?.meta?.currentPage ? data?.meta?.currentPage - 1 : 0,
+    pageSize: data?.meta?.limit || DEFAULT_PAGE_SIZE,
   });
 
-  const [filters, setFilters] = useState<Record<string, string>>({});
-
-  const params = new URLSearchParams({
-    page: (pagination.pageIndex + 1).toString(),
-    pageSize: pagination.pageSize.toString(),
-    ...filters,
-  });
-
-  const { data, error, isLoading } = useQuery<ApiResponse<TData>>({
-    queryKey: [url, params.toString()],
-    queryFn: async () => {
-      const res = await fetch(`${url}?${params.toString()}`);
-      if (!res.ok) throw new Error("Failed to fetch");
-      return res.json();
-    },
-    staleTime: 1000 * 60 * 5, // 5 minutes
-    gcTime: 1000 * 60 * 10, // garbage collection time (formerly cacheTime)
-  });
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
   const table = useReactTable({
-    data: data?.data || [],
+    data: data?.list || [],
     columns,
-    rowCount: data?.total || 0,
+    rowCount: data?.meta.totalPages || 0,
     state: {
       pagination,
+      columnVisibility,
     },
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
     manualPagination: true,
   });
 
-  const handleClearFilters = () => {
-    setFilters({});
-    setPagination((prev) => ({
-      ...prev,
-      pageIndex: 0,
-    }));
-  };
-
   return (
     <div className="w-full space-y-4">
-      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div className="flex flex-wrap gap-3">
-          {Object.entries(filters).length > 0 && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleClearFilters}
-              className="h-10 bg-transparent"
-            >
-              Clear Filters
+      <div className="flex justify-end">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="ml-auto">
+              Hide Column <ChevronDown />
             </Button>
-          )}
-        </div>
-        <div className="text-sm text-muted-foreground">
-          {isLoading ? (
-            "Loading..."
-          ) : (
-            <>
-              Page {pagination.pageIndex + 1} of {data?.pageCount || 1} (
-              {data?.total || 0} total)
-            </>
-          )}
-        </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {table
+              .getAllColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                );
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
-      <div className="rounded-md border overflow-hidden">
-        <Table>
+      <div>
+        <Table className="rounded-md border overflow-hidden bg-white w-full">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -250,6 +183,10 @@ export function DataTable<TData extends Record<string, unknown>>({
           >
             <ChevronsRight className="h-4 w-4" />
           </Button>
+          <p className="text-sm text-muted-foreground flex justify-end">
+            Page {pagination.pageIndex + 1} of {data?.meta?.totalPages || 1} (
+            {data?.meta?.totalCount || 0} total)
+          </p>
         </div>
 
         <div className="flex items-center gap-2">
@@ -273,4 +210,56 @@ export function DataTable<TData extends Record<string, unknown>>({
   );
 }
 
-export type { DataTableProps, ApiResponse };
+type RenderTableBodyProps = {
+  isLoading: boolean;
+  error: Error | null;
+  columnLength: number;
+  hasNoResult: boolean;
+  children: ReactElement[];
+};
+
+function RenderTableBody({
+  isLoading,
+  columnLength,
+  error,
+  hasNoResult,
+  children,
+}: RenderTableBodyProps) {
+  if (isLoading) {
+    return (
+      <TableRow>
+        <TableCell colSpan={columnLength} className="h-24 text-center">
+          Loading...
+        </TableCell>
+      </TableRow>
+    );
+  }
+
+  if (error) {
+    return (
+      <TableRow>
+        <TableCell
+          colSpan={columnLength}
+          className="h-24 text-center text-destructive"
+        >
+          Failed to load data
+        </TableCell>
+      </TableRow>
+    );
+  }
+
+  if (hasNoResult) {
+    return (
+      <TableRow>
+        <TableCell
+          colSpan={columnLength}
+          className="h-24 text-center text-muted-foreground"
+        >
+          No results found
+        </TableCell>
+      </TableRow>
+    );
+  }
+
+  return children;
+}

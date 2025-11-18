@@ -24,7 +24,7 @@ export default function Sidebar() {
               {ADMIN_URL_LIST.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <Link href={"/"}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span className="font-medium">{item.title}</span>
                     </Link>

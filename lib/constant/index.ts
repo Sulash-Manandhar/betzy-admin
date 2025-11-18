@@ -73,3 +73,7 @@ export const BRAND_NAME = "BETZY.FUN";
 export const PAGE_SIZES = [10, 20, 30, 40, 50];
 
 export const DEFAULT_PAGE_SIZE = 30;
+
+export const DEFAULT_STALE_TIME = 1000 * 60 * 5; // 5 minutes
+
+export const DEFAULT_GC_TIME = 1000 * 60 * 10; // garbage collection time (formerly cacheTime)

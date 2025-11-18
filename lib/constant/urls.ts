@@ -1,1 +1,5 @@
-export const urls = {};
+export const urls = {
+  user: {
+    findAll: "/admin/user",
+  },
+};
