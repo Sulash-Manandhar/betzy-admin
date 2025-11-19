@@ -1,4 +1,4 @@
-import { SignIn } from "@clerk/nextjs";
+import { SignedOut, SignIn } from "@clerk/nextjs";
 
 export default function SignInPage() {
   return (
@@ -10,7 +10,9 @@ export default function SignInPage() {
             View and manage data for betzy site
           </p>
         </div>
-        <SignIn />
+        <SignedOut>
+          <SignIn />
+        </SignedOut>
       </div>
     </main>
   );

@@ -2,9 +2,6 @@ import axios, { AxiosError, AxiosInstance } from "axios";
 import { env } from "../env";
 import { ClerkToken } from "@lib/types";
 
-const headers = {
-  "Content-Type": "application/json",
-};
 interface RequestParams {
   url: string;
   params?: unknown;
@@ -16,17 +13,10 @@ interface RequestParams {
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: env.BACKEND_API,
   timeout: 30000,
-  headers,
-});
-
-axiosInstance.interceptors.request.use(
-  async (config) => {
-    return config;
+  headers: {
+    "Content-Type": "application/json",
   },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+});
 
 axiosInstance.interceptors.response.use(
   (response) => response,
@@ -44,7 +34,10 @@ const get = async <T>({ url, params, token }: RequestParams) => {
         },
       }
     : undefined;
-  const response = await axiosInstance.get<T>(url, { params, ...config });
+  const response = await axiosInstance.get<T>(url, {
+    params,
+    headers: config?.headers,
+  });
   return response.data;
 };
 

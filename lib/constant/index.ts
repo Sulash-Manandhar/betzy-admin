@@ -56,6 +56,12 @@ export const ADMIN_URL_LIST: Array<AdminUrl> = [
   },
 ];
 
+export const ADMIN_USER_EMAILS = [
+  "admin@betzy.fun",
+  "awalupshot@gmail.com",
+  "sulash.manandhar@gmail.com",
+];
+
 export const COLORFUL_GRID = [
   "bg-green-400",
   "bg-blue-300",
@@ -71,7 +77,7 @@ export const COLORFUL_GRID = [
 export const BRAND_NAME = "BETZY.FUN";
 
 export const PAGE_SIZES = [10, 20, 30, 40, 50];
-
+export const DEFAULT_PAGE_NUMBER = 1;
 export const DEFAULT_PAGE_SIZE = 30;
 
 export const DEFAULT_STALE_TIME = 1000 * 60 * 5; // 5 minutes

@@ -7,8 +7,9 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { NextUrlType } from "@/lib/types";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { Fragment, ReactNode } from "react";
+import { Fragment, PropsWithChildren } from "react";
 
 type TableBreadCrumbProps = {
   crumbs: Array<{ name: string; link: NextUrlType; isCurrentPage?: boolean }>;
@@ -66,10 +67,26 @@ function TableHeader({
   );
 }
 
-function TableLayout({ children }: { children: ReactNode }) {
+function TableLayout({ children }: PropsWithChildren) {
   return (
     <div className="flex flex-col gap-3 p-2 w-full h-full">{children}</div>
   );
 }
 
-export { TableLayout, TableHeader, TableBreadCrumb };
+function FilterBox({
+  children,
+  className,
+}: PropsWithChildren<{ className?: string }>) {
+  return (
+    <div
+      className={cn(
+        "grid grid-cols-1 gap-2 lg:grid-cols-3 bg-white p-4 rounded-md",
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
+export { FilterBox, TableBreadCrumb, TableHeader, TableLayout };

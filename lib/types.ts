@@ -1,6 +1,7 @@
 import { LucideProps } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 
+//CORE TYPES
 export type LucideIconType = ForwardRefExoticComponent<
   Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
 >;
@@ -31,6 +32,14 @@ export type PaginatedResponse<T> = {
   list: Array<T>;
 };
 
+export type PaginationFilter = {
+  page: number;
+  limit: number;
+};
+
+//SCHEMA
+
+//MEMBERSHIP TYPES
 export type Membership = {
   id: number;
   name: string;
@@ -41,6 +50,18 @@ export type Membership = {
   updatedAt: string;
 };
 
+//GALLERY TYpe
+export type Images = {
+  id: number;
+  fileName: string;
+  url: string;
+  active: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date | null;
+};
+
+//USER TYPES
 export type User = {
   balance: number;
   clerkId: string;
@@ -57,3 +78,27 @@ export type User = {
   membership: Membership;
   referralCode: string;
 };
+
+export type UserFilter = {
+  email: string;
+  membership: string;
+} & PaginationFilter;
+
+//GAME TYPE
+export type Game = {
+  name: string;
+  game_link: string;
+  image_id: number;
+  description: string | null;
+  id: number;
+  image: Images | null;
+  is_featured: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date | null;
+};
+
+export type GameFilter = {
+  name: string;
+  description: string;
+} & PaginationFilter;

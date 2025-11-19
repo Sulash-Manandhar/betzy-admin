@@ -8,8 +8,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from "@/lib/constant";
-import { PaginatedResponse } from "@/lib/types";
+import { PAGE_SIZES } from "@/lib/constant";
+import { PaginatedResponse, PaginationFilter } from "@/lib/types";
 import {
   type ColumnDef,
   type PaginationState,
@@ -26,30 +26,42 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
-import { ReactElement, useState } from "react";
+import {
+  Dispatch,
+  ReactElement,
+  SetStateAction,
+  useEffect,
+  useEffectEvent,
+  useState,
+} from "react";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { Skeleton } from "../ui/skeleton";
 
-interface DataTableProps<TData> {
+interface DataTableProps<TData, TFilter> {
   isLoading: boolean;
   error: Error | null;
   data: PaginatedResponse<TData> | undefined;
   columns: ColumnDef<TData>[];
+  filterState: TFilter;
+  setFilterParams: Dispatch<SetStateAction<TFilter>>;
 }
 
-export function DataTable<TData extends Record<string, unknown>>({
+export function DataTable<TData, TFilter extends PaginationFilter>({
   columns,
   data,
   isLoading,
   error,
-}: DataTableProps<TData>) {
+  filterState,
+  setFilterParams,
+}: DataTableProps<TData, TFilter>) {
   const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: data?.meta?.currentPage ? data?.meta?.currentPage - 1 : 0,
-    pageSize: data?.meta?.limit || DEFAULT_PAGE_SIZE,
+    pageIndex: filterState.page ? filterState.page - 1 : 0,
+    pageSize: filterState.limit,
   });
 
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -68,6 +80,20 @@ export function DataTable<TData extends Record<string, unknown>>({
     onColumnVisibilityChange: setColumnVisibility,
     manualPagination: true,
   });
+
+  const onPaginationChange = useEffectEvent(
+    (currentPagination: PaginationState) => {
+      setFilterParams((prev) => ({
+        ...prev,
+        page: currentPagination.pageIndex + 1,
+        limit: currentPagination.pageSize,
+      }));
+    }
+  );
+
+  useEffect(() => {
+    onPaginationChange(pagination);
+  }, [pagination]);
 
   return (
     <div className="w-full space-y-4">
@@ -226,13 +252,13 @@ function RenderTableBody({
   children,
 }: RenderTableBodyProps) {
   if (isLoading) {
-    return (
-      <TableRow>
-        <TableCell colSpan={columnLength} className="h-24 text-center">
-          Loading...
+    return Array.from({ length: 20 }).map((_, index) => (
+      <TableRow key={index}>
+        <TableCell colSpan={columnLength} className="h-4 text-center">
+          <Skeleton className="h-5 w-full rounded-sm" />
         </TableCell>
       </TableRow>
-    );
+    ));
   }
 
   if (error) {
