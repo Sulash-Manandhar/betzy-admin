@@ -15,7 +15,7 @@ type TableBreadCrumbProps = {
   crumbs: Array<{ name: string; link: NextUrlType; isCurrentPage?: boolean }>;
 };
 
-function TableBreadCrumb({ crumbs }: TableBreadCrumbProps) {
+function LayoutBreadCrumb({ crumbs }: TableBreadCrumbProps) {
   const crumbsLength = crumbs.length;
   return (
     <Breadcrumb>
@@ -27,7 +27,7 @@ function TableBreadCrumb({ crumbs }: TableBreadCrumbProps) {
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         {crumbs.map((item, index) => {
-          const isLastLink = index === crumbsLength;
+          const isLastLink = index + 1 !== crumbsLength;
           return (
             <Fragment key={item.name}>
               <BreadcrumbItem key={item.name}>
@@ -52,28 +52,32 @@ function TableBreadCrumb({ crumbs }: TableBreadCrumbProps) {
   );
 }
 
-function TableHeader({
+function LayoutHeader({
   title,
+  children,
   description,
-}: {
+}: PropsWithChildren<{
   title: string;
   description?: string;
-}) {
+}>) {
   return (
-    <div>
-      <h2 className="text-xl font-semibold">{title}</h2>
-      {!!description && <p className="text-sm font-light">{description}</p>}
+    <div className="flex flex-row justify-between items-center">
+      <div>
+        <h2 className="text-xl font-semibold">{title}</h2>
+        {!!description && <p className="text-sm font-light">{description}</p>}
+      </div>
+      {!!children && <div>{children}</div>}
     </div>
   );
 }
 
-function TableLayout({ children }: PropsWithChildren) {
+function Layout({ children }: PropsWithChildren) {
   return (
     <div className="flex flex-col gap-3 p-2 w-full h-full">{children}</div>
   );
 }
 
-function FilterBox({
+function FilterContainer({
   children,
   className,
 }: PropsWithChildren<{ className?: string }>) {
@@ -89,4 +93,8 @@ function FilterBox({
   );
 }
 
-export { FilterBox, TableBreadCrumb, TableHeader, TableLayout };
+function Container({ children }: PropsWithChildren) {
+  return <div className="rounded-md p-4 bg-white">{children}</div>;
+}
+
+export { FilterContainer, LayoutBreadCrumb, LayoutHeader, Layout, Container };

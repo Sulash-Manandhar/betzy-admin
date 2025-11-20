@@ -1,11 +1,7 @@
 "use client";
 
 import { DataTable } from "@/components/common/DataTable";
-import {
-  TableBreadCrumb,
-  TableHeader,
-  TableLayout,
-} from "@/components/layouts/TableLayout";
+import { LayoutBreadCrumb, LayoutHeader, Layout } from "@/components/layouts";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -38,6 +34,7 @@ function GamesPage() {
     page: DEFAULT_PAGE_NUMBER,
     limit: DEFAULT_PAGE_SIZE,
   });
+
   const { data, ...rest } = useQuery(listGameOptions(filterParams, token));
 
   const columns: ColumnDef<Game>[] = useMemo(() => {
@@ -47,7 +44,6 @@ function GamesPage() {
         header: "Name",
         cell: ({ row }) => {
           const { image, name } = row.original;
-          console.log(row.original);
           return (
             <div className="flex flex-row items-center gap-2">
               <div className="relative w-10 h-10 rounded-full overflow-hidden">
@@ -128,12 +124,16 @@ function GamesPage() {
   }, []);
 
   return (
-    <TableLayout>
-      <TableBreadCrumb
+    <Layout>
+      <LayoutBreadCrumb
         crumbs={[{ name: "Games", link: "/admin/games", isCurrentPage: true }]}
       />
       <div className="flex flex-col gap-2">
-        <TableHeader title="Games" description="View and manage every games." />
+        <LayoutHeader title="Games" description="View and manage every games.">
+          <Button asChild>
+            <Link href="/admin/games/add">Add Game</Link>
+          </Button>
+        </LayoutHeader>
       </div>
 
       <DataTable
@@ -143,7 +143,7 @@ function GamesPage() {
         setFilterParams={setFilterParams}
         {...rest}
       />
-    </TableLayout>
+    </Layout>
   );
 }
 

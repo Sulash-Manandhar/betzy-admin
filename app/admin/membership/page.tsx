@@ -1,10 +1,6 @@
 "use client";
 import { DataTable } from "@/components/common/DataTable";
-import {
-  TableBreadCrumb,
-  TableHeader,
-  TableLayout,
-} from "@/components/layouts/TableLayout";
+import { LayoutBreadCrumb, LayoutHeader, Layout } from "@/components/layouts";
 import { useAuthToken } from "@/context/AuthTokenProvider";
 import { membershipListOption } from "@/hooks/queries/membership";
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "@/lib/constant";
@@ -53,8 +49,8 @@ export default function MembershipPage() {
   }, []);
 
   return (
-    <TableLayout>
-      <TableBreadCrumb
+    <Layout>
+      <LayoutBreadCrumb
         crumbs={[
           {
             name: "Membership",
@@ -64,7 +60,7 @@ export default function MembershipPage() {
         ]}
       />
       <div className="flex flex-col gap-2">
-        <TableHeader title="Membership" description="View all membership." />
+        <LayoutHeader title="Membership" description="View all membership." />
         <DataTable
           columns={columns}
           data={data}
@@ -73,6 +69,6 @@ export default function MembershipPage() {
           {...rest}
         />
       </div>
-    </TableLayout>
+    </Layout>
   );
 }

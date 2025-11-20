@@ -6,8 +6,6 @@ export default function useIsMasterAdmin() {
   const { user, isSignedIn, isLoaded } = useUser();
 
   if (!isSignedIn || !isLoaded) return false;
-  console.log(user.emailAddresses?.[0].emailAddress);
-
   if (ADMIN_USER_EMAILS.includes(user?.emailAddresses?.[0]?.emailAddress))
     return true;
   return false;

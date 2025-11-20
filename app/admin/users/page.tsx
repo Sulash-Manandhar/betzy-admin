@@ -1,11 +1,11 @@
 "use client";
 import { DataTable } from "@/components/common/DataTable";
 import {
-  FilterBox,
-  TableBreadCrumb,
-  TableHeader,
-  TableLayout,
-} from "@/components/layouts/TableLayout";
+  FilterContainer,
+  LayoutBreadCrumb,
+  LayoutHeader,
+  Layout,
+} from "@/components/layouts";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -124,8 +124,8 @@ export default function UserPage() {
   );
 
   return (
-    <TableLayout>
-      <TableBreadCrumb
+    <Layout>
+      <LayoutBreadCrumb
         crumbs={[
           {
             name: "User",
@@ -135,8 +135,8 @@ export default function UserPage() {
         ]}
       />
       <div className="flex flex-col gap-2">
-        <TableHeader title="Users" description="View and manage every user." />
-        <FilterBox>
+        <LayoutHeader title="Users" description="View and manage every user." />
+        <FilterContainer>
           <div className="flex flex-col gap-3">
             <Label className="text-sm">Email Address</Label>
             <DebounceInput
@@ -153,7 +153,7 @@ export default function UserPage() {
               size="sm"
             />
           </div>
-        </FilterBox>
+        </FilterContainer>
         <DataTable
           columns={columns}
           data={data}
@@ -162,6 +162,6 @@ export default function UserPage() {
           {...rest}
         />
       </div>
-    </TableLayout>
+    </Layout>
   );
 }

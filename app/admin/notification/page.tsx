@@ -1,10 +1,6 @@
 "use client";
 import { DataTable } from "@/components/common/DataTable";
-import {
-  TableBreadCrumb,
-  TableHeader,
-  TableLayout,
-} from "@/components/layouts/TableLayout";
+import { LayoutBreadCrumb, LayoutHeader, Layout } from "@/components/layouts";
 import { useAuthToken } from "@/context/AuthTokenProvider";
 import { notificationListOption } from "@/hooks/queries/notification";
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "@/lib/constant";
@@ -59,8 +55,8 @@ export default function NotificationPage() {
   }, []);
 
   return (
-    <TableLayout>
-      <TableBreadCrumb
+    <Layout>
+      <LayoutBreadCrumb
         crumbs={[
           {
             name: "Notification",
@@ -70,7 +66,7 @@ export default function NotificationPage() {
         ]}
       />
       <div className="flex flex-col gap-2">
-        <TableHeader title="Notification" description="View all membership." />
+        <LayoutHeader title="Notification" description="View all membership." />
         <DataTable
           columns={columns}
           data={data}
@@ -79,6 +75,6 @@ export default function NotificationPage() {
           {...rest}
         />
       </div>
-    </TableLayout>
+    </Layout>
   );
 }

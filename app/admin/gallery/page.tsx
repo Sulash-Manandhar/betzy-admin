@@ -1,11 +1,7 @@
 "use client";
 import AddImage from "@/components/gallery/AddImage";
 import GalleryListItem from "@/components/gallery/GalleryListItem";
-import {
-  TableBreadCrumb,
-  TableHeader,
-  TableLayout,
-} from "@/components/layouts/TableLayout";
+import { LayoutBreadCrumb, LayoutHeader, Layout } from "@/components/layouts";
 import { Spinner } from "@/components/ui/spinner";
 import { useAuthToken } from "@/context/AuthTokenProvider";
 import { getAllGalleryImagesOption } from "@/hooks/queries/gallery";
@@ -27,8 +23,8 @@ export default function GalleryPage() {
   );
 
   return (
-    <TableLayout>
-      <TableBreadCrumb
+    <Layout>
+      <LayoutBreadCrumb
         crumbs={[
           {
             name: "Gallery",
@@ -38,7 +34,7 @@ export default function GalleryPage() {
         ]}
       />
       <div className="flex flex-col gap-4">
-        <TableHeader title="Gallery" description="View and manage images." />
+        <LayoutHeader title="Gallery" description="View and manage images." />
         <AddImage />
         <RenderGalleryBody
           hasNoImages={data?.list?.length === 0}
@@ -50,7 +46,7 @@ export default function GalleryPage() {
           ))}
         </RenderGalleryBody>
       </div>
-    </TableLayout>
+    </Layout>
   );
 }
 
