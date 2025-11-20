@@ -4,6 +4,7 @@ export const urls = {
   },
   game: {
     findAll: "/game",
+    find: "/game/:id",
     create: "/admin/game",
     update: "/admin/game/:id",
     destroy: "/admin/game/:id",

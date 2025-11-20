@@ -3,7 +3,7 @@ import { GameFilter, PaginationFilter, UserFilter } from "../types";
 export const queryKeys = {
   user: {
     all: ["user"] as const,
-    list: (filters: UserFilter) => [
+    findAll: (filters: UserFilter) => [
       ...queryKeys.user.all,
       "user-list",
       { ...filters },
@@ -11,7 +11,8 @@ export const queryKeys = {
   },
   game: {
     all: ["game"] as const,
-    list: (params: GameFilter) => [
+    findOne: (id: string) => [...queryKeys.game.all, "game", id],
+    findAll: (params: GameFilter) => [
       ...queryKeys.game.all,
       "game-list",
       { ...params },
@@ -19,7 +20,7 @@ export const queryKeys = {
   },
   membership: {
     all: ["membership"] as const,
-    list: (params: PaginationFilter) => [
+    findAll: (params: PaginationFilter) => [
       ...queryKeys.membership.all,
       "membership-list",
       { ...params },
@@ -27,11 +28,11 @@ export const queryKeys = {
   },
   notification: {
     all: ["notification"] as const,
-    list: () => [...queryKeys.notification.all, "notification-list"],
+    findAll: () => [...queryKeys.notification.all, "notification-list"],
   },
   gallery: {
     all: ["gallery"] as const,
-    list: (params: PaginationFilter) => [
+    findAll: (params: PaginationFilter) => [
       ...queryKeys.gallery.all,
       "gallery-images",
       { ...params },

@@ -12,7 +12,7 @@ export function getAllGalleryImagesOption(
   token: ClerkToken
 ) {
   return queryOptions({
-    queryKey: queryKeys.gallery.list(params),
+    queryKey: queryKeys.gallery.findAll(params),
     queryFn: () => getGalleryImages(params, token),
     enabled: !!token,
   });

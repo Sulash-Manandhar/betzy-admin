@@ -8,7 +8,7 @@ export function notificationListOption(
   token: ClerkToken
 ) {
   return queryOptions({
-    queryKey: queryKeys.notification.list(),
+    queryKey: queryKeys.notification.findAll(),
     queryFn: () => notificationList(params, token),
     enabled: !!token,
   });

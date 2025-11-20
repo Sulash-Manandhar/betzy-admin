@@ -23,3 +23,22 @@ export function createGame(data: CreateGameSchema, token: ClerkToken) {
     data,
   });
 }
+
+export function findGame(id: string, token: ClerkToken) {
+  return axios.get<Game>({
+    url: urls.game.find.replace(":id", id),
+    token,
+  });
+}
+
+export function updateGame(
+  id: string,
+  data: CreateGameSchema,
+  token: ClerkToken
+) {
+  return axios.put({
+    url: urls.game.update.replace(":id", id),
+    token,
+    data,
+  });
+}

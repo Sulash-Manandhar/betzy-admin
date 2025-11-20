@@ -5,7 +5,7 @@ import { queryOptions } from "@tanstack/react-query";
 
 export function userListQueryOption(params: UserFilter, token: ClerkToken) {
   return queryOptions({
-    queryKey: queryKeys.user.list(params),
+    queryKey: queryKeys.user.findAll(params),
     queryFn: () => list(params, token),
     enabled: !!token,
   });

@@ -35,7 +35,6 @@ export default function AddImage() {
         value={images}
         onChange={onChange}
         maxNumber={10}
-        acceptType={["image/jpg", "image/png", "image/jpeg"]}
       >
         {({
           imageList,

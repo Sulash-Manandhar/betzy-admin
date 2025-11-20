@@ -105,7 +105,11 @@ function GamesPage() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem>Edit</DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href={`/admin/games/edit/${row.original.id}`}>
+                    Edit
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem>Delete</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>

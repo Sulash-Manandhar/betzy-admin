@@ -8,7 +8,7 @@ export function membershipListOption(
   token: ClerkToken
 ) {
   return queryOptions({
-    queryKey: queryKeys.membership.list(params),
+    queryKey: queryKeys.membership.findAll(params),
     queryFn: () => getAllMembership(params, token),
     enabled: !!token,
   });
