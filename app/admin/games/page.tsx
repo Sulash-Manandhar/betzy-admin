@@ -6,18 +6,7 @@ import {
   TableHeader,
   TableLayout,
 } from "@/components/layouts/TableLayout";
-import { Switch } from "@/components/ui/switch";
-import { useAuthToken } from "@/context/AuthTokenProvider";
-import { listGameOptions } from "@/hooks/queries/game";
-import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "@/lib/constant";
-import { Game, GameFilter } from "@/lib/types";
-import { getImage } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
-import { ColumnDef } from "@tanstack/react-table";
-import Image from "next/image";
-import Link from "next/link";
-import React, { useMemo, useState } from "react";
-import { UrlObject } from "url";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,8 +15,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Switch } from "@/components/ui/switch";
+import { useAuthToken } from "@/context/AuthTokenProvider";
+import { listGameOptions } from "@/hooks/queries/game";
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "@/lib/constant";
+import { Game, GameFilter } from "@/lib/types";
+import { imageLoader } from "@/lib/utils";
+import { FallBackImage } from "@/public/images";
+import { useQuery } from "@tanstack/react-query";
+import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import Link from "next/link";
+import { useMemo, useState } from "react";
+import { UrlObject } from "url";
 
 function GamesPage() {
   const { token } = useAuthToken();
@@ -44,19 +45,33 @@ function GamesPage() {
       {
         accessorKey: "name",
         header: "Name",
-        cell: ({ row }) => (
-          <div className="flex flex-row items-center gap-2">
-            <div className="relative w-10 h-10 rounded-full overflow-hidden">
-              <Image
-                src={getImage(row.original.image?.url)}
-                alt={row.original.name}
-                fill
-                objectFit="cover"
-              />
+        cell: ({ row }) => {
+          const { image, name } = row.original;
+          console.log(row.original);
+          return (
+            <div className="flex flex-row items-center gap-2">
+              <div className="relative w-10 h-10 rounded-full overflow-hidden">
+                {image?.url ? (
+                  <Image
+                    src={image.url}
+                    alt={name}
+                    fill
+                    objectFit="cover"
+                    loader={imageLoader}
+                  />
+                ) : (
+                  <Image
+                    src={FallBackImage}
+                    alt={name}
+                    fill
+                    objectFit="cover"
+                  />
+                )}
+              </div>
+              <span className="font-semibold">{name}</span>
             </div>
-            <span className="font-semibold">{row.original.name}</span>
-          </div>
-        ),
+          );
+        },
       },
       {
         accessorKey: "is_featured",

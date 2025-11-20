@@ -25,4 +25,16 @@ export const queryKeys = {
       { ...params },
     ],
   },
+  notification: {
+    all: ["notification"] as const,
+    list: () => [...queryKeys.notification.all, "notification-list"],
+  },
+  gallery: {
+    all: ["gallery"] as const,
+    list: (params: PaginationFilter) => [
+      ...queryKeys.gallery.all,
+      "gallery-images",
+      { ...params },
+    ],
+  },
 };

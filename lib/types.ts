@@ -51,7 +51,7 @@ export type Membership = {
 };
 
 //GALLERY TYpe
-export type Images = {
+export type ImageType = {
   id: number;
   fileName: string;
   url: string;
@@ -91,7 +91,7 @@ export type Game = {
   image_id: number;
   description: string | null;
   id: number;
-  image: Images | null;
+  image: ImageType | null;
   is_featured: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -102,3 +102,19 @@ export type GameFilter = {
   name: string;
   description: string;
 } & PaginationFilter;
+
+//NOTIFICATION
+
+export type NotificationType = "PAYMENT_INITIATED";
+
+export type Notification = {
+  title: string;
+  description: string;
+  type: NotificationType;
+  user: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+  createdAt: string;
+};

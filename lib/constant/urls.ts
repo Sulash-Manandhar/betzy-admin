@@ -8,4 +8,10 @@ export const urls = {
   membership: {
     findAll: "/membership",
   },
+  notification: {
+    findAll: "/admin/notification",
+  },
+  gallery: {
+    findAll: "/admin/gallery",
+  },
 };
