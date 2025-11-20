@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
 import { useAuthToken } from "@/context/AuthTokenProvider";
-import { listGameOptions } from "@/hooks/queries/game";
+import { findAllGameQueryOption } from "@/hooks/queries/game";
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "@/lib/constant";
 import { Game, GameFilter } from "@/lib/types";
 import { imageLoader } from "@/lib/utils";
@@ -35,7 +35,9 @@ function GamesPage() {
     limit: DEFAULT_PAGE_SIZE,
   });
 
-  const { data, ...rest } = useQuery(listGameOptions(filterParams, token));
+  const { data, ...rest } = useQuery(
+    findAllGameQueryOption(filterParams, token)
+  );
 
   const columns: ColumnDef<Game>[] = useMemo(() => {
     const columns: ColumnDef<Game>[] = [

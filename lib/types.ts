@@ -1,5 +1,7 @@
 import { LucideProps } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
+import z from "zod/v3";
+import { createGameSchema } from "./schema";
 
 //CORE TYPES
 export type LucideIconType = ForwardRefExoticComponent<
@@ -38,6 +40,7 @@ export type PaginationFilter = {
 };
 
 //SCHEMA
+export type CreateGameSchema = z.infer<typeof createGameSchema>;
 
 //MEMBERSHIP TYPES
 export type Membership = {

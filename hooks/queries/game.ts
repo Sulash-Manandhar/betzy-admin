@@ -1,12 +1,21 @@
-import { listGame } from "@/lib/api/game";
+import { createGame, findAllGame } from "@/lib/api/game";
 import { queryKeys } from "@/lib/constant/queryKeys";
-import { ClerkToken, GameFilter } from "@/lib/types";
-import { queryOptions } from "@tanstack/react-query";
+import { ClerkToken, CreateGameSchema, GameFilter } from "@/lib/types";
+import { queryOptions, useMutation } from "@tanstack/react-query";
 
-export function listGameOptions(params: GameFilter, token: ClerkToken) {
+export function findAllGameQueryOption(params: GameFilter, token: ClerkToken) {
   return queryOptions({
     queryKey: queryKeys.game.list(params),
-    queryFn: () => listGame(params, token),
+    queryFn: () => findAllGame(params, token),
     enabled: !!token,
+  });
+}
+
+export function useCreateGame(token: ClerkToken) {
+  return useMutation({
+    mutationFn: (data: CreateGameSchema) => createGame(data, token),
+    meta: {
+      invalidateQueries: queryKeys.game.all,
+    },
   });
 }

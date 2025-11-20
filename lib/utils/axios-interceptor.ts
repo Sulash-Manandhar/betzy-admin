@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosInstance } from "axios";
 import { env } from "../env";
 import { ClerkToken } from "@lib/types";
+import { cleanData } from ".";
 
 interface RequestParams {
   url: string;
@@ -35,7 +36,7 @@ const get = async <T>({ url, params, token }: RequestParams) => {
       }
     : undefined;
   const response = await axiosInstance.get<T>(url, {
-    params,
+    params: cleanData(params),
     headers: config?.headers,
   });
   return response.data;
@@ -50,7 +51,7 @@ const post = async <T>({ url, data, token }: RequestParams) => {
         },
       }
     : undefined;
-  const response = await axiosInstance.post<T>(url, data, config);
+  const response = await axiosInstance.post<T>(url, cleanData(data), config);
   return response.data;
 };
 
