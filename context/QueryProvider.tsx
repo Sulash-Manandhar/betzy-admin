@@ -9,7 +9,7 @@ const queryClient = new QueryClient({
     queries: {
       staleTime: DEFAULT_STALE_TIME,
       gcTime: DEFAULT_GC_TIME,
-      retry: 0,
+      retry: 1,
       refetchOnWindowFocus: false,
     },
     mutations: {

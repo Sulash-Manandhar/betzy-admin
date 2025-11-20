@@ -13,5 +13,7 @@ export const urls = {
   },
   gallery: {
     findAll: "/admin/gallery",
+    createMany: "/admin/gallery/uploads",
+    destroy: "/admin/gallery/:id",
   },
 };

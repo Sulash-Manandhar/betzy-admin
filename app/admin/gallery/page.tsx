@@ -1,4 +1,5 @@
 "use client";
+import AddImage from "@/components/gallery/AddImage";
 import GalleryListItem from "@/components/gallery/GalleryListItem";
 import {
   TableBreadCrumb,
@@ -36,8 +37,9 @@ export default function GalleryPage() {
           },
         ]}
       />
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-4">
         <TableHeader title="Gallery" description="View and manage images." />
+        <AddImage />
         <RenderGalleryBody
           hasNoImages={data?.list?.length === 0}
           isError={isError}
@@ -88,6 +90,8 @@ export function RenderGalleryBody({
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 p-2 py-4">{children}</div>
+    <div className="grid sm:grid-cols-5  lg:grid-cols-3 lg xl:grid-cols-5 gap-4 xl:gap-2 p-2 py-4">
+      {children}
+    </div>
   );
 }

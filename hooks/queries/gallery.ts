@@ -1,7 +1,11 @@
-import { getGalleryImages } from "@/lib/api/gallery";
+import {
+  createManyImage,
+  deleteImage,
+  getGalleryImages,
+} from "@/lib/api/gallery";
 import { queryKeys } from "@/lib/constant/queryKeys";
 import { ClerkToken, PaginationFilter } from "@/lib/types";
-import { queryOptions } from "@tanstack/react-query";
+import { queryOptions, useMutation } from "@tanstack/react-query";
 
 export function getAllGalleryImagesOption(
   params: PaginationFilter,
@@ -11,5 +15,22 @@ export function getAllGalleryImagesOption(
     queryKey: queryKeys.gallery.list(params),
     queryFn: () => getGalleryImages(params, token),
     enabled: !!token,
+  });
+}
+
+export function useCreateManyImages(token: ClerkToken) {
+  return useMutation({
+    mutationFn: (data: FormData) => createManyImage(data, token),
+    meta: {
+      invalidateQueries: queryKeys.gallery.all,
+    },
+  });
+}
+export function useDeleteImage(id: string, token: ClerkToken) {
+  return useMutation({
+    mutationFn: () => deleteImage(id, token),
+    meta: {
+      invalidateQueries: queryKeys.gallery.all,
+    },
   });
 }

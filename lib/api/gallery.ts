@@ -14,3 +14,18 @@ export function getGalleryImages(params: PaginationFilter, token: ClerkToken) {
     params,
   });
 }
+
+export function createManyImage(data: FormData, token: ClerkToken) {
+  return axios.formdataPost({
+    url: urls.gallery.createMany,
+    token,
+    data,
+  });
+}
+
+export function deleteImage(id: string, token: ClerkToken) {
+  return axios.del({
+    url: urls.gallery.destroy.replace(":id", id),
+    token,
+  });
+}
