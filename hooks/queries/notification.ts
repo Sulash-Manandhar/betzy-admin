@@ -1,15 +1,17 @@
 import { notificationList } from "@/lib/api/notification";
 import { queryKeys } from "@/lib/constant/queryKeys";
-import { ClerkToken, PaginationFilter } from "@/lib/types";
-import { queryOptions } from "@tanstack/react-query";
+import { PaginationFilter } from "@/lib/types";
+import { useAuth } from "@clerk/nextjs";
+import { useQuery } from "@tanstack/react-query";
 
-export function notificationListOption(
-  params: PaginationFilter,
-  token: ClerkToken
-) {
-  return queryOptions({
+export function useNotificationList(params: PaginationFilter) {
+  const { getToken } = useAuth();
+
+  return useQuery({
     queryKey: queryKeys.notification.findAll(),
-    queryFn: () => notificationList(params, token),
-    enabled: !!token,
+    queryFn: async () => {
+      const token = await getToken();
+      return notificationList(params, token);
+    },
   });
 }

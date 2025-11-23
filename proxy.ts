@@ -1,26 +1,34 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import rolesAndPermissions from "./lib/constant/rolesAndPermissions";
 
-const validateIsAdmin = createRouteMatcher(["/admin(.*)"]);
-const isSignInPage = createRouteMatcher(["/"]);
-
-const redirect = (request: NextRequest, pathname: string) =>
-  NextResponse.redirect(new URL(pathname, request.url));
+const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
+const isSignInRoute = createRouteMatcher(["/"]);
+const isUnauthorizedRoute = createRouteMatcher(["/unauthorized"]);
 
 export default clerkMiddleware(async (auth, request) => {
-  try {
-    const { orgRole } = await auth();
+  const { orgRole, isAuthenticated } = await auth();
+  const isAdmin = orgRole === rolesAndPermissions.admin;
 
-    if (isSignInPage(request) && orgRole === rolesAndPermissions.admin) {
-      return redirect(request, "/admin");
+  // Redirect unauthenticated users to sign-in
+  if (!isAuthenticated) {
+    if (!isSignInRoute(request)) {
+      return NextResponse.redirect(new URL("/", request.url));
     }
-    if (validateIsAdmin(request) && orgRole !== rolesAndPermissions.admin) {
-      return redirect(request, "/");
+    return;
+  }
+
+  // Redirect authenticated admins away from sign-in and unauthorized pages
+  if (isAdmin) {
+    if (isSignInRoute(request) || isUnauthorizedRoute(request)) {
+      return NextResponse.redirect(new URL("/admin", request.url));
     }
-  } catch (error) {
-    console.log("Proxy Error:", error);
-    return redirect(request, "/");
+    return;
+  }
+
+  // Redirect non-admin users trying to access admin routes
+  if (isAdminRoute(request)) {
+    return NextResponse.redirect(new URL("/unauthorized", request.url));
   }
 });
 

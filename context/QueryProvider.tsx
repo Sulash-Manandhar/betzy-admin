@@ -13,7 +13,8 @@ const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
     },
     mutations: {
-      onSettled: (_data, _error, _vairables, _context, mutation) => {
+      onSettled: (_data, error, _vairables, _context, mutation) => {
+        if (error) return;
         if (mutation.meta?.invalidateQueries) {
           queryClient.invalidateQueries({
             queryKey: mutation.meta.invalidateQueries,

@@ -1,27 +1,20 @@
+import { useDeleteImage } from "@/hooks/queries/gallery";
 import { ImageType } from "@/lib/types";
 import { imageLoader } from "@/lib/utils";
+import { Trash2 } from "lucide-react";
 import Image from "next/image";
 import { AspectRatio } from "../ui/aspect-ratio";
-import { useDeleteImage } from "@/hooks/queries/gallery";
-import { useAuthToken } from "@/context/AuthTokenProvider";
-import { Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
-import { Spinner } from "../ui/spinner";
 type Props = {
   image: ImageType;
 };
 
 export default function GalleryListItem({ image }: Props) {
-  const { token, isLoading } = useAuthToken();
-  const { mutate, isPending } = useDeleteImage(image.id.toString(), token);
+  const { mutate, isPending } = useDeleteImage(image.id.toString());
 
   const onDelete = () => {
     mutate();
   };
-
-  if (isLoading) {
-    return <Spinner />;
-  }
 
   return (
     <div className=" group relative flex flex-col rounded-sm items-center w-[100px] md:w-[200px] gap-2 border border-gray-400 shadow-2xl p-2  ">

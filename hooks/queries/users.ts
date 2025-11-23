@@ -1,12 +1,17 @@
 import { list } from "@/lib/api/user";
 import { queryKeys } from "@/lib/constant/queryKeys";
-import { ClerkToken, UserFilter } from "@/lib/types";
-import { queryOptions } from "@tanstack/react-query";
+import { UserFilter } from "@/lib/types";
+import { useAuth } from "@clerk/nextjs";
+import { useQuery } from "@tanstack/react-query";
 
-export function userListQueryOption(params: UserFilter, token: ClerkToken) {
-  return queryOptions({
+export function useUserList(params: UserFilter) {
+  const { getToken } = useAuth();
+
+  return useQuery({
     queryKey: queryKeys.user.findAll(params),
-    queryFn: () => list(params, token),
-    enabled: !!token,
+    queryFn: async () => {
+      const token = await getToken();
+      return list(params, token);
+    },
   });
 }

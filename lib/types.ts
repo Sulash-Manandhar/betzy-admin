@@ -2,13 +2,16 @@ import { LucideProps } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 import z from "zod/v3";
 import { createGameSchema } from "./schema";
+import { UrlObject } from "url";
 
 //CORE TYPES
 export type LucideIconType = ForwardRefExoticComponent<
   Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
 >;
 
-export type NextUrlType = __next_route_internal_types__.RouteImpl<"/">;
+export type NextUrlType =
+  | UrlObject
+  | __next_route_internal_types__.RouteImpl<"/">;
 
 export type AdminUrl = {
   title: string;
@@ -95,9 +98,11 @@ export type Game = {
   description: string | null;
   id: number;
   image: ImageType | null;
+  is_active: boolean;
   is_featured: boolean;
   createdAt: Date;
   updatedAt: Date;
+  gameType: "OFF_MARKET" | "PLATFORM";
   deletedAt: Date | null;
 };
 

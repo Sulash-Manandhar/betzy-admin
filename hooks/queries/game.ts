@@ -1,38 +1,62 @@
 import { createGame, findAllGame, findGame, updateGame } from "@/lib/api/game";
 import { queryKeys } from "@/lib/constant/queryKeys";
-import { ClerkToken, CreateGameSchema, GameFilter } from "@/lib/types";
-import { queryOptions, useMutation } from "@tanstack/react-query";
+import { CreateGameSchema, GameFilter } from "@/lib/types";
+import { useAuth } from "@clerk/nextjs";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
-export function findAllGameQueryOption(params: GameFilter, token: ClerkToken) {
-  return queryOptions({
+export function useFindAllGame(params: GameFilter) {
+  const { getToken } = useAuth();
+
+  return useQuery({
     queryKey: queryKeys.game.findAll(params),
-    queryFn: () => findAllGame(params, token),
-    enabled: !!token,
+    queryFn: async () => {
+      const token = await getToken();
+      return findAllGame(params, token);
+    },
   });
 }
 
-export function useCreateGame(token: ClerkToken) {
+export function useCreateGame() {
+  const { getToken } = useAuth();
+
   return useMutation({
-    mutationFn: (data: CreateGameSchema) => createGame(data, token),
+    mutationFn: async (data: CreateGameSchema) => {
+      const token = await getToken();
+      return createGame(data, token);
+    },
     meta: {
       invalidateQueries: queryKeys.game.all,
     },
   });
 }
-export function useUpdateGame(token: ClerkToken) {
+export function useUpdateGame() {
+  const { getToken } = useAuth();
+
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: CreateGameSchema }) =>
-      updateGame(id, data, token),
+    mutationFn: async ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: CreateGameSchema;
+    }) => {
+      const token = await getToken();
+      return updateGame(id, data, token);
+    },
     meta: {
       invalidateQueries: queryKeys.game.all,
     },
   });
 }
 
-export function findGameQueryOption(id: string, token: ClerkToken) {
-  return queryOptions({
+export function useFindGame(id: string) {
+  const { getToken } = useAuth();
+
+  return useQuery({
     queryKey: queryKeys.game.findOne(id),
-    queryFn: () => findGame(id, token),
-    enabled: !!token,
+    queryFn: async () => {
+      const token = await getToken();
+      return findGame(id, token);
+    },
   });
 }

@@ -1,6 +1,6 @@
 "use client";
 import { Spinner } from "@/components/ui/spinner";
-import { getAllGalleryImagesOption } from "@/hooks/queries/gallery";
+import { useGalleryImage } from "@/hooks/queries/gallery";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import {
   AlertDialog,
@@ -16,7 +16,6 @@ import { ImageType } from "@lib/types";
 import { cn, imageLoader } from "@lib/utils";
 import { FallBackImage } from "@public/images";
 import { AspectRatio } from "@radix-ui/react-aspect-ratio";
-import { useQuery } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
 import Image from "next/image";
 import React, {
@@ -25,7 +24,6 @@ import React, {
   PropsWithChildren,
   useContext,
 } from "react";
-import { useAuthToken } from "./AuthTokenProvider";
 
 type ContextType = {
   isOpen: boolean;
@@ -118,12 +116,9 @@ function ImageSelector({ onOpen, selectedImage }: ImageSelectorProps) {
 
 export default function ImageGalleryProvider({ children }: PropsWithChildren) {
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
-  const { token } = useAuthToken();
   const [selectImage, setSelectImage] = React.useState<ImageType | null>(null);
 
-  const { data, isLoading } = useQuery(
-    getAllGalleryImagesOption({ page: 1, limit: 3000 }, token)
-  );
+  const { data, isLoading } = useGalleryImage({ page: 1, limit: 3000 });
 
   const onSelectImage = (image: ImageType | null) => {
     setSelectImage(image);
@@ -138,8 +133,8 @@ export default function ImageGalleryProvider({ children }: PropsWithChildren) {
 
   if (isLoading) {
     return (
-      <div className="grid place-items-center w-full h-full">
-        <Spinner />;
+      <div className="grid place-items-center w-full h-dvh">
+        <Spinner />
       </div>
     );
   }

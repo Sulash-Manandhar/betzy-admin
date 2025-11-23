@@ -2,9 +2,9 @@
 import { DataTable } from "@/components/common/DataTable";
 import {
   FilterContainer,
+  Layout,
   LayoutBreadCrumb,
   LayoutHeader,
-  Layout,
 } from "@/components/layouts";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,19 +17,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAuthToken } from "@/context/AuthTokenProvider";
-import { userListQueryOption } from "@/hooks/queries/users";
+import { useUserList } from "@/hooks/queries/users";
 import useIsMasterAdmin from "@/hooks/useIsAdmin";
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "@/lib/constant";
 import { User, UserFilter } from "@/lib/types";
-import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { useMemo, useState } from "react";
 import { DebounceInput } from "react-debounce-input";
 
 export default function UserPage() {
-  const { token } = useAuthToken();
   const isMasterAdmin = useIsMasterAdmin();
 
   const [filterParams, setFilterParams] = useState<UserFilter>({
@@ -39,7 +36,7 @@ export default function UserPage() {
     membership: "",
   });
 
-  const { data, ...rest } = useQuery(userListQueryOption(filterParams, token));
+  const { data, ...rest } = useUserList(filterParams);
 
   const columns: ColumnDef<User>[] = useMemo(
     () => [
@@ -129,7 +126,7 @@ export default function UserPage() {
         crumbs={[
           {
             name: "User",
-            link: "/admin/users",
+            href: "/admin/users",
             isCurrentPage: true,
           },
         ]}

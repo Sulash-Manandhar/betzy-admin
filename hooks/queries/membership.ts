@@ -1,15 +1,17 @@
 import { getAllMembership } from "@/lib/api/membership";
 import { queryKeys } from "@/lib/constant/queryKeys";
-import { ClerkToken, PaginationFilter } from "@/lib/types";
-import { queryOptions } from "@tanstack/react-query";
+import { PaginationFilter } from "@/lib/types";
+import { useAuth } from "@clerk/nextjs";
+import { useQuery } from "@tanstack/react-query";
 
-export function membershipListOption(
-  params: PaginationFilter,
-  token: ClerkToken
-) {
-  return queryOptions({
+export function useMemberList(params: PaginationFilter) {
+  const { getToken } = useAuth();
+
+  return useQuery({
     queryKey: queryKeys.membership.findAll(params),
-    queryFn: () => getAllMembership(params, token),
-    enabled: !!token,
+    queryFn: async () => {
+      const token = await getToken();
+      return getAllMembership(params, token);
+    },
   });
 }

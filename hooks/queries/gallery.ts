@@ -4,31 +4,40 @@ import {
   getGalleryImages,
 } from "@/lib/api/gallery";
 import { queryKeys } from "@/lib/constant/queryKeys";
-import { ClerkToken, PaginationFilter } from "@/lib/types";
-import { queryOptions, useMutation } from "@tanstack/react-query";
+import { PaginationFilter } from "@/lib/types";
+import { useAuth } from "@clerk/nextjs";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
-export function getAllGalleryImagesOption(
-  params: PaginationFilter,
-  token: ClerkToken
-) {
-  return queryOptions({
+export function useGalleryImage(params: PaginationFilter) {
+  const { getToken } = useAuth();
+  return useQuery({
     queryKey: queryKeys.gallery.findAll(params),
-    queryFn: () => getGalleryImages(params, token),
-    enabled: !!token,
+    queryFn: async () => {
+      const token = await getToken();
+      return getGalleryImages(params, token);
+    },
   });
 }
 
-export function useCreateManyImages(token: ClerkToken) {
+export function useCreateManyImages() {
+  const { getToken } = useAuth();
   return useMutation({
-    mutationFn: (data: FormData) => createManyImage(data, token),
+    mutationFn: async (data: FormData) => {
+      const token = await getToken();
+      return createManyImage(data, token);
+    },
     meta: {
       invalidateQueries: queryKeys.gallery.all,
     },
   });
 }
-export function useDeleteImage(id: string, token: ClerkToken) {
+export function useDeleteImage(id: string) {
+  const { getToken } = useAuth();
   return useMutation({
-    mutationFn: () => deleteImage(id, token),
+    mutationFn: async () => {
+      const token = await getToken();
+      return deleteImage(id, token);
+    },
     meta: {
       invalidateQueries: queryKeys.gallery.all,
     },

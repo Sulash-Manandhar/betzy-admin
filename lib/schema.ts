@@ -11,7 +11,7 @@ export const createGameSchema = z.object({
   name: z
     .string()
     .min(3, { message: "Game name should be atleast 3 character long." }),
-  game_link: z.string().min(3, { message: "Game link should be a valid url." }),
+  game_link: z.string().url(),
   image_id: z.number().optional(),
   description: z.string().optional(),
 });

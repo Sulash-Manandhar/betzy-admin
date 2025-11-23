@@ -1,23 +1,19 @@
 "use client";
 import { DataTable } from "@/components/common/DataTable";
-import { LayoutBreadCrumb, LayoutHeader, Layout } from "@/components/layouts";
-import { useAuthToken } from "@/context/AuthTokenProvider";
-import { membershipListOption } from "@/hooks/queries/membership";
+import { Layout, LayoutBreadCrumb, LayoutHeader } from "@/components/layouts";
+import { useMemberList } from "@/hooks/queries/membership";
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "@/lib/constant";
 import { Membership, PaginationFilter } from "@/lib/types";
-import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 export default function MembershipPage() {
-  const { token } = useAuthToken();
-
   const [filterParams, setFilterParams] = useState<PaginationFilter>({
     page: DEFAULT_PAGE_NUMBER,
     limit: DEFAULT_PAGE_SIZE,
   });
 
-  const { data, ...rest } = useQuery(membershipListOption(filterParams, token));
+  const { data, ...rest } = useMemberList(filterParams);
 
   const columns = useMemo(() => {
     const columns: ColumnDef<Membership>[] = [
@@ -54,7 +50,7 @@ export default function MembershipPage() {
         crumbs={[
           {
             name: "Membership",
-            link: "/admin/membership",
+            href: "/admin/membership",
             isCurrentPage: true,
           },
         ]}

@@ -1,26 +1,20 @@
 "use client";
 import AddImage from "@/components/gallery/AddImage";
 import GalleryListItem from "@/components/gallery/GalleryListItem";
-import { LayoutBreadCrumb, LayoutHeader, Layout } from "@/components/layouts";
+import { Layout, LayoutBreadCrumb, LayoutHeader } from "@/components/layouts";
 import { Spinner } from "@/components/ui/spinner";
-import { useAuthToken } from "@/context/AuthTokenProvider";
-import { getAllGalleryImagesOption } from "@/hooks/queries/gallery";
+import { useGalleryImage } from "@/hooks/queries/gallery";
 import { DEFAULT_PAGE_NUMBER } from "@/lib/constant";
 import { PaginationFilter } from "@/lib/types";
-import { useQuery } from "@tanstack/react-query";
 import { PropsWithChildren, useState } from "react";
 
 export default function GalleryPage() {
-  const { token } = useAuthToken();
-
   const [filterParams] = useState<PaginationFilter>({
     page: DEFAULT_PAGE_NUMBER,
     limit: 300,
   });
 
-  const { data, isLoading, isError } = useQuery(
-    getAllGalleryImagesOption(filterParams, token)
-  );
+  const { data, isLoading, isError } = useGalleryImage(filterParams);
 
   return (
     <Layout>
@@ -28,7 +22,7 @@ export default function GalleryPage() {
         crumbs={[
           {
             name: "Gallery",
-            link: "/admin/gallery",
+            href: "/admin/gallery",
             isCurrentPage: true,
           },
         ]}

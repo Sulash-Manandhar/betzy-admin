@@ -1,4 +1,3 @@
-import { useAuthToken } from "@/context/AuthTokenProvider";
 import { useCreateManyImages } from "@/hooks/queries/gallery";
 import { Delete, Plus } from "lucide-react";
 import Image from "next/image";
@@ -8,9 +7,7 @@ import { AspectRatio } from "../ui/aspect-ratio";
 import { Button } from "../ui/button";
 
 export default function AddImage() {
-  const { token } = useAuthToken();
-
-  const { mutate, isPending } = useCreateManyImages(token);
+  const { mutate, isPending } = useCreateManyImages();
   const [images, setImages] = useState<ImageListType>([]);
 
   const onChange = (imageList: ImageListType) => {

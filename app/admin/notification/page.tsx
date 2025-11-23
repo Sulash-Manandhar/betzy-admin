@@ -1,24 +1,19 @@
 "use client";
 import { DataTable } from "@/components/common/DataTable";
-import { LayoutBreadCrumb, LayoutHeader, Layout } from "@/components/layouts";
-import { useAuthToken } from "@/context/AuthTokenProvider";
-import { notificationListOption } from "@/hooks/queries/notification";
+import { Layout, LayoutBreadCrumb, LayoutHeader } from "@/components/layouts";
+import { useNotificationList } from "@/hooks/queries/notification";
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "@/lib/constant";
 import { Notification, PaginationFilter } from "@/lib/types";
-import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 
 export default function NotificationPage() {
-  const { token } = useAuthToken();
   const [filterParams, setFilterParams] = useState<PaginationFilter>({
     page: DEFAULT_PAGE_NUMBER,
     limit: DEFAULT_PAGE_SIZE,
   });
 
-  const { data, ...rest } = useQuery(
-    notificationListOption(filterParams, token)
-  );
+  const { data, ...rest } = useNotificationList(filterParams);
 
   const columns = useMemo(() => {
     const columns: ColumnDef<Notification>[] = [
@@ -60,7 +55,7 @@ export default function NotificationPage() {
         crumbs={[
           {
             name: "Notification",
-            link: "/admin/notification",
+            href: "/admin/notification",
             isCurrentPage: true,
           },
         ]}

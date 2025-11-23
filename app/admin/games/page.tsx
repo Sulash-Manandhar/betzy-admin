@@ -1,7 +1,7 @@
 "use client";
 
 import { DataTable } from "@/components/common/DataTable";
-import { LayoutBreadCrumb, LayoutHeader, Layout } from "@/components/layouts";
+import { Layout, LayoutBreadCrumb, LayoutHeader } from "@/components/layouts";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,22 +12,26 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
-import { useAuthToken } from "@/context/AuthTokenProvider";
-import { findAllGameQueryOption } from "@/hooks/queries/game";
+import { useFindAllGame } from "@/hooks/queries/game";
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "@/lib/constant";
 import { Game, GameFilter } from "@/lib/types";
 import { imageLoader } from "@/lib/utils";
 import { FallBackImage } from "@/public/images";
-import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
+import {
+  Edit2,
+  ExternalLink,
+  Link2,
+  Link2Off,
+  MoreHorizontal,
+  Trash2,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { UrlObject } from "url";
 
 function GamesPage() {
-  const { token } = useAuthToken();
   const [filterParams, setFilterParams] = useState<GameFilter>({
     name: "",
     description: "",
@@ -35,9 +39,7 @@ function GamesPage() {
     limit: DEFAULT_PAGE_SIZE,
   });
 
-  const { data, ...rest } = useQuery(
-    findAllGameQueryOption(filterParams, token)
-  );
+  const { data, ...rest } = useFindAllGame(filterParams);
 
   const columns: ColumnDef<Game>[] = useMemo(() => {
     const columns: ColumnDef<Game>[] = [
@@ -83,13 +85,48 @@ function GamesPage() {
         ),
       },
       {
+        accessorKey: "is_active",
+        header: "Active",
+        cell: ({ row }) => (
+          <Switch
+            id="is_featured"
+            checked={row.original.is_featured}
+            disabled
+          />
+        ),
+      },
+      {
+        accessorKey: "gameType",
+        header: "Type",
+        cell: (info) => info.getValue(),
+      },
+      {
         accessorKey: "game_link",
         header: "Game Link",
-        cell: (info) => (
-          <Link target="_blank" href={info.getValue() as UrlObject}>
-            Visit Link
-          </Link>
-        ),
+        cell: (info) => {
+          if (info.getValue()) {
+            return (
+              <Link target="_blank" href={info.getValue() as UrlObject}>
+                <Link2 className="size-5 stroke-green-600" />
+              </Link>
+            );
+          }
+          return <Link2Off className="size-5 stroke-gray-400/80" />;
+        },
+      },
+      {
+        accessorKey: "description",
+        header: "Game Link",
+        cell: (info) => {
+          if (info.getValue()) {
+            return (
+              <p className="truncate max-w-[50ch]">
+                {info.getValue() as string}
+              </p>
+            );
+          }
+          return <p>-</p>;
+        },
       },
       {
         header: "Action",
@@ -107,18 +144,12 @@ function GamesPage() {
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuItem asChild>
                   <Link href={`/admin/games/edit/${row.original.id}`}>
-                    Edit
+                    <Edit2 className="size-4" /> Edit
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>Delete</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link
-                    target="_blank"
-                    href={row.original.game_link as unknown as UrlObject}
-                  >
-                    Visit Link
-                  </Link>
+                <DropdownMenuItem>
+                  <Trash2 className="size-4" />
+                  Delete
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -132,7 +163,7 @@ function GamesPage() {
   return (
     <Layout>
       <LayoutBreadCrumb
-        crumbs={[{ name: "Games", link: "/admin/games", isCurrentPage: true }]}
+        crumbs={[{ name: "Games", href: "/admin/games", isCurrentPage: true }]}
       />
       <div className="flex flex-col gap-2">
         <LayoutHeader title="Games" description="View and manage every games.">

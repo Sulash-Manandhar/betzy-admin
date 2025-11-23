@@ -1,3 +1,4 @@
 export const STORAGE_KEYS = {
   USER_TABLE: "USER TABLE",
+  AUTH_TOKEN: "AUTH_TOKEN",
 };

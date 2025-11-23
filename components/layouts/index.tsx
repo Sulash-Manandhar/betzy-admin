@@ -12,7 +12,11 @@ import Link from "next/link";
 import { Fragment, PropsWithChildren } from "react";
 
 type TableBreadCrumbProps = {
-  crumbs: Array<{ name: string; link: NextUrlType; isCurrentPage?: boolean }>;
+  crumbs: Array<{
+    name: string;
+    href: NextUrlType;
+    isCurrentPage?: boolean;
+  }>;
 };
 
 function LayoutBreadCrumb({ crumbs }: TableBreadCrumbProps) {
@@ -37,7 +41,7 @@ function LayoutBreadCrumb({ crumbs }: TableBreadCrumbProps) {
                   </BreadcrumbPage>
                 ) : (
                   <BreadcrumbLink asChild>
-                    <Link href={item.link} className="font-semibold">
+                    <Link href={item.href} className="font-semibold">
                       {item.name}
                     </Link>
                   </BreadcrumbLink>

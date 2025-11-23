@@ -8,7 +8,6 @@ import {
 } from "@/components/layouts";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { useAppForm } from "@/components/ui/from";
-import { useAuthToken } from "@/context/AuthTokenProvider";
 import { useImageGallery } from "@/context/ImageGalleryProvider";
 import { useCreateGame } from "@/hooks/queries/game";
 import { createGameSchema } from "@/lib/schema";
@@ -24,22 +23,23 @@ const defaultValues: CreateGameSchema = {
 };
 
 export default function AddGame() {
-  const { token } = useAuthToken();
   const router = useRouter();
-  const { mutate } = useCreateGame(token);
+  const { mutate } = useCreateGame();
   const { ImageSelector, selectedImage, clearSelectImage } = useImageGallery();
 
   const form = useAppForm({
     defaultValues: defaultValues,
     validators: {
-      onBlur: createGameSchema,
       onChange: createGameSchema,
       onSubmit: createGameSchema,
     },
     onSubmit: ({ value }) => {
-      mutate(value);
-      clearSelectImage();
-      router.push("/admin/games");
+      mutate(value, {
+        onSuccess: () => {
+          router.push("/admin/games");
+          clearSelectImage();
+        },
+      });
     },
   });
 
@@ -55,10 +55,10 @@ export default function AddGame() {
     <Layout>
       <LayoutBreadCrumb
         crumbs={[
-          { name: "Games", link: "/admin/games" },
+          { name: "Games", href: "/admin/games" },
           {
             name: "Add Game",
-            link: "/admin/games/add",
+            href: "/admin/games/add",
             isCurrentPage: true,
           },
         ]}
