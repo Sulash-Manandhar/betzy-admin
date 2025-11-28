@@ -106,3 +106,17 @@
   --sidebar-border: hsl(240 3.7% 15.9%);
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
+
+.toast-description {
+  color: var(--color-white) !important;
+  font-weight: semibold !important;
+}
+
+.toast-container {
+  background-color: var(--color-primary) !important;
+  color: var(--color-white) !important;
+}
+
+.toast-container > div {
+  font-weight: bold !important;
+}

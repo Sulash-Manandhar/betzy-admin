@@ -1,4 +1,9 @@
-import { GameFilter, PaginationFilter, UserFilter } from "../types";
+import {
+  FindAllReferralFilter,
+  GameFilter,
+  PaginationFilter,
+  UserFilter,
+} from "../types";
 
 export const queryKeys = {
   user: {
@@ -35,6 +40,14 @@ export const queryKeys = {
     findAll: (params: PaginationFilter) => [
       ...queryKeys.gallery.all,
       "gallery-images",
+      { ...params },
+    ],
+  },
+  referral: {
+    all: ["referral"] as const,
+    findAll: (params: FindAllReferralFilter) => [
+      ...queryKeys.referral.all,
+      "referral",
       { ...params },
     ],
   },

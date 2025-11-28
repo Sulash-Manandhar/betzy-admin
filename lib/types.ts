@@ -19,6 +19,14 @@ export type AdminUrl = {
   icon: LucideIconType;
 };
 
+export type APIError<T> = {
+  error: {
+    message: string;
+    statusCode: number;
+    detail?: T;
+  };
+};
+
 export type ClerkToken = string | null;
 
 export type Meta = {
@@ -126,3 +134,7 @@ export type Notification = {
   };
   createdAt: string;
 };
+
+export type FindAllReferralFilter = {
+  referralId: number;
+} & PaginationFilter;

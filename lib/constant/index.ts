@@ -30,8 +30,8 @@ export const ADMIN_URL_LIST: Array<AdminUrl> = [
     icon: Image,
   },
   {
-    title: "Request Game Tag",
-    url: "/admin",
+    title: "User Game Tag",
+    url: "/admin/user-game-tag",
     icon: MailWarning,
   },
   {

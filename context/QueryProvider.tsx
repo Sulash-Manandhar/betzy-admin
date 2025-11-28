@@ -1,8 +1,15 @@
 "use client";
 
 import { DEFAULT_GC_TIME, DEFAULT_STALE_TIME } from "@/lib/constant";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { APIError } from "@/lib/types";
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { PropsWithChildren } from "react";
+import { toast } from "sonner";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -13,7 +20,7 @@ const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
     },
     mutations: {
-      onSettled: (_data, error, _vairables, _context, mutation) => {
+      onSettled: (_data, error, _variables, _context, mutation) => {
         if (error) return;
         if (mutation.meta?.invalidateQueries) {
           queryClient.invalidateQueries({
@@ -23,6 +30,20 @@ const queryClient = new QueryClient({
       },
     },
   },
+  queryCache: new QueryCache({
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        const newError = error as AxiosError<APIError<unknown>>;
+        toast.error("Something went wrong", {
+          description: newError?.response?.data?.error?.message,
+          descriptionClassName: "toast-description",
+          className: "toast-container",
+        });
+        return;
+      }
+      toast.error("Something went wrong");
+    },
+  }),
 });
 
 export function QueryProvider({ children }: PropsWithChildren) {

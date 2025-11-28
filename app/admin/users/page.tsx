@@ -23,6 +23,7 @@ import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "@/lib/constant";
 import { User, UserFilter } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { DebounceInput } from "react-debounce-input";
 
@@ -101,14 +102,18 @@ export default function UserPage() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem>Edit</DropdownMenuItem>
+                <DropdownMenuItem>Copy User&apos;s clerk Id</DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => navigator.clipboard.writeText(data.clerkId)}
                 >
                   Copy User&apos;s Clerk ID
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href={`/admin/users/${data.id}/referrals`}>
+                    View User&apos;s Referrals
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem>View User&apos;s Game Tag</DropdownMenuItem>
                 <DropdownMenuItem>View User&apos;s Task</DropdownMenuItem>
               </DropdownMenuContent>

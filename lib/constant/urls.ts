@@ -20,4 +20,7 @@ export const urls = {
     createMany: "/admin/gallery/uploads",
     destroy: "/admin/gallery/:id",
   },
+  referral: {
+    findAll: "/admin/user/referral",
+  },
 };

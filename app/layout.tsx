@@ -5,6 +5,7 @@ import { QueryProvider } from "@/context/QueryProvider";
 import { SyncActiveOrganization } from "@/context/SyncActiveOrganizationProvider";
 import { auth } from "@clerk/nextjs/server";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -29,6 +30,7 @@ export default async function RootLayout({
         <ClerkProvider>
           <QueryProvider>{children}</QueryProvider>
           <SyncActiveOrganization membership={sessionClaims?.membership} />
+          <Toaster closeButton position="top-center" duration={93500} />
         </ClerkProvider>
       </body>
     </html>
