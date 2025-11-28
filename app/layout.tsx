@@ -30,7 +30,7 @@ export default async function RootLayout({
         <ClerkProvider>
           <QueryProvider>{children}</QueryProvider>
           <SyncActiveOrganization membership={sessionClaims?.membership} />
-          <Toaster closeButton position="top-center" duration={93500} />
+          <Toaster closeButton position="top-center" duration={3500} />
         </ClerkProvider>
       </body>
     </html>

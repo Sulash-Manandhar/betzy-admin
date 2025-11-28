@@ -21,6 +21,6 @@ export const urls = {
     destroy: "/admin/gallery/:id",
   },
   referral: {
-    findAll: "/admin/user/referral",
+    findAll: "/admin/user/referrals",
   },
 };

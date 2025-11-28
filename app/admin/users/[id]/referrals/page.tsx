@@ -10,11 +10,13 @@ import {
   UserFilter,
 } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
+import { useParams } from "next/navigation";
 import React, { useMemo, useState } from "react";
 
 export default function Referrals() {
+  const { id } = useParams<{ id: string }>();
   const [filterParams, setFilterParams] = useState<FindAllReferralFilter>({
-    referralId: 1,
+    referralId: Number(id),
     page: DEFAULT_PAGE_NUMBER,
     limit: DEFAULT_PAGE_SIZE,
   });
