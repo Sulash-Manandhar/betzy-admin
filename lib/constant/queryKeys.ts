@@ -13,6 +13,7 @@ export const queryKeys = {
       "user-list",
       { ...filters },
     ],
+    find: (id: number | null) => [...queryKeys.user.all, "user", id],
   },
   game: {
     all: ["game"] as const,

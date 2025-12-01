@@ -1,15 +1,14 @@
 "use client";
-import { DataTable } from "@/components/common/DataTable";
-import { Layout, LayoutBreadCrumb, LayoutHeader } from "@/components/layouts";
 import { useReferral } from "@/hooks/queries/referral";
 import useIsMasterAdmin from "@/hooks/useIsAdmin";
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "@/lib/constant";
 import { FindAllReferralFilter, Referrals } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { useParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
+import { DataTable } from "../common/DataTable";
 
-export default function ReferralsPage() {
+export default function ReferralTable() {
   const isMasterAdmin = useIsMasterAdmin();
 
   const { id } = useParams<{ id: string }>();
@@ -69,35 +68,14 @@ export default function ReferralsPage() {
   }, [isMasterAdmin]);
 
   return (
-    <Layout>
-      <LayoutBreadCrumb
-        crumbs={[
-          {
-            name: "User",
-            href: "/admin/users",
-          },
-          {
-            name: "User's Referrals",
-            href: {
-              pathname: "/admin/users/4/referrals",
-            },
-            isCurrentPage: true,
-          },
-        ]}
+    <>
+      <DataTable
+        columns={columns}
+        data={data}
+        filterState={filterParams}
+        setFilterParams={setFilterParams}
+        {...rest}
       />
-      <div className="flex flex-col gap-2">
-        <LayoutHeader
-          title="Users Referrals"
-          description="View user's referrals."
-        />
-        <DataTable
-          columns={columns}
-          data={data}
-          filterState={filterParams}
-          setFilterParams={setFilterParams}
-          {...rest}
-        />
-      </div>
-    </Layout>
+    </>
   );
 }

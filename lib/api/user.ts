@@ -9,3 +9,10 @@ export function list(params: UserFilter, token: ClerkToken) {
     token,
   });
 }
+
+export function findOne(id: number | null, token: ClerkToken) {
+  return axios.get<User>({
+    url: urls.user.find.replace(":id", id?.toString() || ""),
+    token,
+  });
+}

@@ -50,12 +50,14 @@ export default function UserPage() {
       {
         header: "Name",
         cell: ({ row }) => (
-          <p className="flex flex-col">
-            <span className="text-sm font-semibold">
-              {row.original.firstName} {row.original.lastName}
-            </span>
-            {isMasterAdmin && <span>{row.original.email}</span>}
-          </p>
+          <Link href={`/admin/users/${row.original.id}`}>
+            <p className="flex flex-col">
+              <span className="text-sm font-semibold">
+                {row.original.firstName} {row.original.lastName}
+              </span>
+              {isMasterAdmin && <span>{row.original.email}</span>}
+            </p>
+          </Link>
         ),
       },
       {
@@ -101,14 +103,6 @@ export default function UserPage() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem>Copy User&apos;s clerk Id</DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => navigator.clipboard.writeText(data.clerkId)}
-                >
-                  Copy User&apos;s Clerk ID
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link href={`/admin/users/${data.id}/referrals`}>
                     View User&apos;s Referrals

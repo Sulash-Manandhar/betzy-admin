@@ -1,6 +1,7 @@
 export const urls = {
   user: {
     findAll: "/admin/user",
+    find: "/admin/user/:id",
   },
   game: {
     findAll: "/game",

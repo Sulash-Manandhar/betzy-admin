@@ -26,7 +26,9 @@ function LayoutBreadCrumb({ crumbs }: TableBreadCrumbProps) {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link href="/admin">Admin</Link>
+            <Link href="/admin" className="font-semibold hover:underline">
+              Admin
+            </Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
@@ -41,7 +43,10 @@ function LayoutBreadCrumb({ crumbs }: TableBreadCrumbProps) {
                   </BreadcrumbPage>
                 ) : (
                   <BreadcrumbLink asChild>
-                    <Link href={item.href} className="font-semibold">
+                    <Link
+                      href={item.href}
+                      className="font-semibold hover:underline"
+                    >
                       {item.name}
                     </Link>
                   </BreadcrumbLink>
@@ -77,7 +82,7 @@ function LayoutHeader({
 
 function Layout({ children }: PropsWithChildren) {
   return (
-    <div className="flex flex-col gap-3 p-2 w-full h-full">{children}</div>
+    <div className="flex flex-col gap-4 p-2 w-full h-full">{children}</div>
   );
 }
 
@@ -97,8 +102,13 @@ function FilterContainer({
   );
 }
 
-function Container({ children }: PropsWithChildren) {
-  return <div className="rounded-md p-4 bg-white">{children}</div>;
+function Container({
+  children,
+  className,
+}: PropsWithChildren<{ className?: string }>) {
+  return (
+    <div className={cn("rounded-md p-4 bg-white", className)}>{children}</div>
+  );
 }
 
 export { FilterContainer, LayoutBreadCrumb, LayoutHeader, Layout, Container };
