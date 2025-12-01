@@ -7,6 +7,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { useParams } from "next/navigation";
 import React, { useMemo, useState } from "react";
 import { DataTable } from "../common/DataTable";
+import Link from "next/link";
 
 export default function ReferralTable() {
   const isMasterAdmin = useIsMasterAdmin();
@@ -30,27 +31,17 @@ export default function ReferralTable() {
       },
       {
         accessorKey: "referredBy",
-        header: "Referred By",
+        header: "Referred To",
         cell: ({ row }) => (
-          <p className="flex flex-col">
-            <span className="text-sm font-semibold">
-              {row.original.referredUser.firstName}{" "}
-              {row.original.referredUser.lastName}
-            </span>
-            {isMasterAdmin && <span>{row.original.referredUser.email}</span>}
-          </p>
-        ),
-      },
-      {
-        accessorKey: "referredUser",
-        header: "Referred User",
-        cell: ({ row }) => (
-          <p className="flex flex-col">
-            <span className="text-sm font-semibold">
-              {row.original.referrer.firstName} {row.original.referrer.lastName}
-            </span>
-            {isMasterAdmin && <span>{row.original.referrer.email}</span>}
-          </p>
+          <Link href={`/admin/users/${row.original.referredUser.id}`}>
+            <p className="flex flex-col">
+              <span className="text-sm font-semibold">
+                {row.original.referredUser.firstName}{" "}
+                {row.original.referredUser.lastName}
+              </span>
+              {isMasterAdmin && <span>{row.original.referredUser.email}</span>}
+            </p>
+          </Link>
         ),
       },
       {
