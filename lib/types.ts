@@ -138,3 +138,17 @@ export type Notification = {
 export type FindAllReferralFilter = {
   referralId: number;
 } & PaginationFilter;
+
+//Referral
+
+export type Referrals = {
+  id: number;
+  bonusAmount: number | null;
+  bonusAwarded: boolean;
+  createdAt: string;
+  referralCode: string;
+  referredUserId: number;
+  referrerId: number;
+  referredUser: User;
+  referrer: User;
+};
